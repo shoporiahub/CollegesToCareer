@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+>
+
+    <!-- Home -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/</loc>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+
+
+    <!-- Templates -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/templates</loc>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+
+    <!-- Pricing -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/pricing</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+
+    <!-- How It Works -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/how-it-works</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+
+    <!-- About -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/about</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+
+    <!-- FAQ -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/faq</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+
+    <!-- Contact -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/contact</loc>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+
+    <!-- Privacy Policy -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/privacy-policy</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+
+    <!-- Terms of Service -->
+
+    <url>
+        <loc>https://www.collegetocareer.com/terms-of-service</loc>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+</urlset>

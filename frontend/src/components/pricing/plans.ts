@@ -1,0 +1,46 @@
+export const PLANS = [
+    {
+        name: "Free",
+        price: "₹0",
+        period: "/month",
+        description: "Perfect for trying Vivah Craft.",
+        features: [
+            "1 biodata generation per month",
+            "Free templates",
+            "Print support",
+            "Community support",
+        ],
+        buttonText: "Get Started",
+        featured: false,
+    },
+    {
+        name: "Premium",
+        price: "₹399",
+        period: "/month",
+        description: "Perfect for individuals creating multiple biodatas.",
+        features: [
+            "10 biodata generations per month",
+            "All premium templates",
+            "PDF download",
+            "Print support",
+            "Priority support",
+        ],
+        buttonText: "Choose Premium",
+        featured: true,
+    },
+    {
+        name: "Ultimate",
+        price: "₹699",
+        period: "/month",
+        description: "Unlimited access to every premium feature.",
+        features: [
+            "Unlimited biodata generations",
+            "Unlimited PDF downloads",
+            "All premium templates",
+            "Priority support",
+            "Early access to new templates",
+        ],
+        buttonText: "Choose Ultimate",
+        featured: false,
+    },
+];
