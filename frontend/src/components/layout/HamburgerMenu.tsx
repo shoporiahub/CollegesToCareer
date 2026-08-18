@@ -1,5 +1,12 @@
-import { useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+    useEffect,
+} from "react";
+
+import {
+    NavLink,
+    useNavigate,
+} from "react-router-dom";
+
 import {
     X,
     Home,
@@ -10,12 +17,18 @@ import {
     LayoutDashboard,
 } from "lucide-react";
 
-import { useAuthStore } from "../../features/auth/store/auth.store";
+import {
+    useAuthStore,
+} from "../../features/auth/store/auth.store";
+
+import logo from "../../assets/application_logo.png";
+
 
 type Props = {
     isOpen: boolean;
     onClose: () => void;
 };
+
 
 const navigation = [
     {
@@ -45,186 +58,498 @@ const navigation = [
     },
 ];
 
+
 function HamburgerMenu({
     isOpen,
     onClose,
 }: Props) {
-    const navigate = useNavigate();
 
-    const isAuthenticated = useAuthStore(
-        (state) => state.isAuthenticated,
-    );
+    const navigate =
+        useNavigate();
 
-    const user = useAuthStore(
-        (state) => state.user,
-    );
 
-    const logout = useAuthStore(
-        (state) => state.logout,
-    );
+    const isAuthenticated =
+        useAuthStore(
+            (state) =>
+                state.isAuthenticated,
+        );
+
+
+    const user =
+        useAuthStore(
+            (state) =>
+                state.user,
+        );
+
+
+    const logout =
+        useAuthStore(
+            (state) =>
+                state.logout,
+        );
+
+
+    /* =========================================================
+     * LOCK BODY SCROLL
+     * ========================================================= */
 
     useEffect(() => {
-        document.body.style.overflow = isOpen
-            ? "hidden"
-            : "auto";
+
+        if (isOpen) {
+
+            document.body.style.overflow =
+                "hidden";
+
+        } else {
+
+            document.body.style.overflow =
+                "";
+
+        }
+
 
         return () => {
-            document.body.style.overflow = "auto";
+
+            document.body.style.overflow =
+                "";
+
         };
+
     }, [isOpen]);
 
+
+    /* =========================================================
+     * LOGOUT
+     * ========================================================= */
+
     const handleLogout = () => {
+
         logout();
+
         onClose();
+
         navigate("/");
+
     };
 
+
+    /* =========================================================
+     * RENDER
+     * ========================================================= */
+
     return (
+
         <div
-            className={`fixed inset-0 z-[100] transition-all duration-300 ${
-                isOpen
+            className={`
+                fixed
+                inset-0
+                z-[100]
+                transition-all
+                duration-300
+                ${isOpen
                     ? "visible opacity-100"
                     : "invisible opacity-0"
-            }`}
+                }
+            `}
         >
-            {/* Overlay */}
+
+            {/* ================================================= */}
+            {/* OVERLAY */}
+            {/* ================================================= */}
 
             <div
-                onClick={onClose}
-                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                onClick={
+                    onClose
+                }
+                className="
+                    absolute
+                    inset-0
+                    bg-slate-950/50
+                    backdrop-blur-sm
+                "
             />
 
-            {/* Drawer */}
+
+            {/* ================================================= */}
+            {/* DRAWER */}
+            {/* ================================================= */}
 
             <aside
-                className={`absolute right-0 top-0 flex h-full w-80 max-w-[88vw] flex-col overflow-hidden bg-white shadow-2xl transition-transform duration-300 ${
-                    isOpen
+                className={`
+                    absolute
+                    right-0
+                    top-0
+                    flex
+                    h-full
+                    w-[340px]
+                    max-w-[88vw]
+                    flex-col
+                    overflow-hidden
+                    bg-white
+                    shadow-2xl
+                    transition-transform
+                    duration-300
+                    ${isOpen
                         ? "translate-x-0"
                         : "translate-x-full"
-                }`}
+                    }
+                `}
             >
-                {/* Header */}
 
-                <div className="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 px-6 pb-8 pt-6 text-white">
+                {/* ================================================= */}
+                {/* HEADER */}
+                {/* ================================================= */}
 
-                    <div className="mb-8 flex items-center justify-between">
+                <div
+                    className="
+                        bg-gradient-to-br
+                        from-slate-950
+                        via-blue-950
+                        to-blue-800
+                        px-5
+                        pb-7
+                        pt-5
+                        text-white
+                    "
+                >
 
-                        <div className="flex items-center gap-3">
+                    {/* Top */}
 
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-600 text-lg font-bold">
-                                R
-                            </div>
+                    <div
+                        className="
+                            flex
+                            items-center
+                            justify-between
+                        "
+                    >
 
-                            <span className="text-xl font-bold">
-                                ResumeAI
-                            </span>
+                        {/* Logo */}
 
-                        </div>
+                        <NavLink
+                            to="/"
+                            onClick={
+                                onClose
+                            }
+                            className="
+                                flex
+                                items-center
+                            "
+                        >
+
+                            <img
+                                src={logo}
+                                alt="College to Career"
+                                className="
+                                    h-14
+                                    w-auto
+                                    object-contain
+                                "
+                            />
+
+                        </NavLink>
+
+
+                        {/* Close */}
 
                         <button
                             type="button"
-                            onClick={onClose}
-                            aria-label="Close menu"
-                            className="rounded-xl p-2 transition hover:bg-white/10"
+                            onClick={
+                                onClose
+                            }
+                            aria-label="Close navigation menu"
+                            className="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-xl
+                                border
+                                border-white/10
+                                bg-white/10
+                                text-white
+                                transition
+                                hover:bg-white/20
+                                active:scale-95
+                            "
                         >
-                            <X size={24} />
+
+                            <X
+                                size={23}
+                            />
+
                         </button>
 
                     </div>
 
-                    <h2 className="text-2xl font-extrabold">
-                        Build Your Career
-                    </h2>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-300">
-                        Create professional, ATS-friendly resumes
-                        in minutes.
-                    </p>
+                    {/* Heading */}
 
-                    <div className="mt-5 inline-flex rounded-full bg-white/10 px-4 py-2 text-xs font-semibold tracking-wide text-blue-100">
-                        AI • Professional • ATS Friendly
+                    <div className="mt-6">
+
+                        <h2
+                            className="
+                                text-2xl
+                                font-extrabold
+                                tracking-tight
+                            "
+                        >
+                            Build Your Career
+                        </h2>
+
+
+                        <p
+                            className="
+                                mt-2
+                                text-sm
+                                leading-6
+                                text-blue-100
+                            "
+                        >
+                            Build your resume, explore
+                            opportunities, and take the
+                            next step toward your career.
+                        </p>
+
+
+                        <div
+                            className="
+                                mt-5
+                                inline-flex
+                                rounded-full
+                                border
+                                border-white/10
+                                bg-white/10
+                                px-4
+                                py-2
+                                text-xs
+                                font-semibold
+                                tracking-wide
+                                text-blue-100
+                            "
+                        >
+                            College • Career • Growth
+                        </div>
+
                     </div>
 
                 </div>
 
-                {/* Navigation */}
 
-                <div className="flex-1 space-y-2 overflow-y-auto px-4 py-6">
+                {/* ================================================= */}
+                {/* NAVIGATION */}
+                {/* ================================================= */}
 
-                    {navigation.map((item) => {
+                <div
+                    className="
+                        flex-1
+                        space-y-2
+                        overflow-y-auto
+                        px-4
+                        py-5
+                    "
+                >
 
-                        const Icon = item.icon;
+                    {navigation.map(
+                        (item) => {
 
-                        return (
-                            <NavLink
-                                key={item.href}
-                                to={item.href}
-                                onClick={onClose}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-4 rounded-2xl px-4 py-3 text-base font-semibold transition-all duration-200 ${
-                                        isActive
-                                            ? "bg-blue-600 text-white shadow-lg"
-                                            : "text-slate-700 hover:bg-slate-100 hover:text-blue-600"
-                                    }`
-                                }
-                            >
-                                <Icon size={20} />
+                            const Icon =
+                                item.icon;
 
-                                <span>
-                                    {item.label}
-                                </span>
-                            </NavLink>
-                        );
-                    })}
+
+                            return (
+
+                                <NavLink
+                                    key={
+                                        item.href
+                                    }
+                                    to={
+                                        item.href
+                                    }
+                                    onClick={
+                                        onClose
+                                    }
+                                    className={({
+                                        isActive,
+                                    }) =>
+                                        `
+                                        flex
+                                        items-center
+                                        gap-4
+                                        rounded-2xl
+                                        px-4
+                                        py-3.5
+                                        text-base
+                                        font-semibold
+                                        transition-all
+                                        duration-200
+                                        ${isActive
+                                            ? `
+                                                    bg-blue-600
+                                                    text-white
+                                                    shadow-md
+                                                  `
+                                            : `
+                                                    text-slate-700
+                                                    hover:bg-blue-50
+                                                    hover:text-blue-600
+                                                  `
+                                        }
+                                        `
+                                    }
+                                >
+
+                                    <Icon
+                                        size={20}
+                                        strokeWidth={2}
+                                    />
+
+                                    <span>
+                                        {
+                                            item.label
+                                        }
+                                    </span>
+
+                                </NavLink>
+
+                            );
+
+                        },
+                    )}
+
+
+                    {/* Dashboard */}
 
                     {isAuthenticated && (
+
                         <NavLink
                             to="/dashboard"
-                            onClick={onClose}
-                            className={({ isActive }) =>
-                                `flex items-center gap-4 rounded-2xl px-4 py-3 text-base font-semibold transition ${
-                                    isActive
-                                        ? "bg-blue-600 text-white"
-                                        : "text-slate-700 hover:bg-slate-100 hover:text-blue-600"
-                                }`
+                            onClick={
+                                onClose
+                            }
+                            className={({
+                                isActive,
+                            }) =>
+                                `
+                                flex
+                                items-center
+                                gap-4
+                                rounded-2xl
+                                px-4
+                                py-3.5
+                                text-base
+                                font-semibold
+                                transition
+                                ${isActive
+                                    ? `
+                                            bg-blue-600
+                                            text-white
+                                            shadow-md
+                                          `
+                                    : `
+                                            text-slate-700
+                                            hover:bg-blue-50
+                                            hover:text-blue-600
+                                          `
+                                }
+                                `
                             }
                         >
-                            <LayoutDashboard size={20} />
+
+                            <LayoutDashboard
+                                size={20}
+                            />
 
                             <span>
                                 Dashboard
                             </span>
+
                         </NavLink>
+
                     )}
 
                 </div>
 
-                {/* Footer */}
 
-                <div className="border-t border-slate-200 bg-slate-50 p-5">
+                {/* ================================================= */}
+                {/* FOOTER */}
+                {/* ================================================= */}
+
+                <div
+                    className="
+                        border-t
+                        border-slate-200
+                        bg-slate-50
+                        p-4
+                    "
+                >
 
                     {!isAuthenticated ? (
 
-                        <div className="space-y-3">
+                        <div
+                            className="
+                                space-y-3
+                            "
+                        >
+
+                            {/* Login */}
 
                             <button
                                 type="button"
                                 onClick={() => {
+
                                     onClose();
-                                    navigate("/login");
+
+                                    navigate(
+                                        "/login",
+                                    );
+
                                 }}
-                                className="w-full rounded-xl border border-slate-300 bg-white py-3 font-semibold text-slate-800 transition hover:bg-slate-100 active:scale-[0.98]"
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    border
+                                    border-slate-300
+                                    bg-white
+                                    py-3
+                                    font-semibold
+                                    text-slate-800
+                                    transition
+                                    hover:border-blue-200
+                                    hover:bg-blue-50
+                                    hover:text-blue-700
+                                    active:scale-[0.98]
+                                "
                             >
                                 Login
                             </button>
 
+
+                            {/* Create Account */}
+
                             <button
                                 type="button"
                                 onClick={() => {
+
                                     onClose();
-                                    navigate("/register");
+
+                                    navigate(
+                                        "/register",
+                                    );
+
                                 }}
-                                className="w-full rounded-xl bg-blue-600 py-3 font-semibold text-white shadow-lg transition hover:bg-blue-700 active:scale-[0.98]"
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    bg-blue-600
+                                    py-3
+                                    font-semibold
+                                    text-white
+                                    shadow-md
+                                    transition
+                                    hover:bg-blue-700
+                                    active:scale-[0.98]
+                                "
                             >
                                 Create Free Account
                             </button>
@@ -233,15 +558,48 @@ function HamburgerMenu({
 
                     ) : (
 
-                        <div className="space-y-4">
+                        <div
+                            className="
+                                space-y-3
+                            "
+                        >
 
-                            {/* User Card */}
+                            {/* User */}
 
-                            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                            <div
+                                className="
+                                    rounded-2xl
+                                    border
+                                    border-slate-200
+                                    bg-white
+                                    p-4
+                                    shadow-sm
+                                "
+                            >
 
-                                <div className="flex items-center gap-4">
+                                <div
+                                    className="
+                                        flex
+                                        items-center
+                                        gap-3
+                                    "
+                                >
 
-                                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-600 text-lg font-bold text-white">
+                                    <div
+                                        className="
+                                            flex
+                                            h-11
+                                            w-11
+                                            shrink-0
+                                            items-center
+                                            justify-center
+                                            rounded-full
+                                            bg-blue-600
+                                            text-base
+                                            font-bold
+                                            text-white
+                                        "
+                                    >
 
                                         {user?.first_name
                                             ?.charAt(0)
@@ -249,17 +607,39 @@ function HamburgerMenu({
 
                                     </div>
 
-                                    <div className="min-w-0">
 
-                                        <p className="truncate font-semibold text-slate-900">
+                                    <div
+                                        className="
+                                            min-w-0
+                                        "
+                                    >
 
-                                            {user?.first_name}{" "}
-                                            {user?.last_name}
-
+                                        <p
+                                            className="
+                                                truncate
+                                                font-semibold
+                                                text-slate-900
+                                            "
+                                        >
+                                            {
+                                                user?.first_name
+                                            }{" "}
+                                            {
+                                                user?.last_name
+                                            }
                                         </p>
 
-                                        <p className="truncate text-sm text-slate-500">
-                                            {user?.email}
+
+                                        <p
+                                            className="
+                                                truncate
+                                                text-sm
+                                                text-slate-500
+                                            "
+                                        >
+                                            {
+                                                user?.email
+                                            }
                                         </p>
 
                                     </div>
@@ -268,10 +648,25 @@ function HamburgerMenu({
 
                             </div>
 
+
+                            {/* Logout */}
+
                             <button
                                 type="button"
-                                onClick={handleLogout}
-                                className="w-full rounded-xl bg-red-500 py-3 font-semibold text-white transition hover:bg-red-600 active:scale-[0.98]"
+                                onClick={
+                                    handleLogout
+                                }
+                                className="
+                                    w-full
+                                    rounded-xl
+                                    bg-red-500
+                                    py-3
+                                    font-semibold
+                                    text-white
+                                    transition
+                                    hover:bg-red-600
+                                    active:scale-[0.98]
+                                "
                             >
                                 Logout
                             </button>
@@ -287,5 +682,6 @@ function HamburgerMenu({
         </div>
     );
 }
+
 
 export default HamburgerMenu;

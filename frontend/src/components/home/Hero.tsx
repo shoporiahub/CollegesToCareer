@@ -1,22 +1,90 @@
-import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import {
+    ArrowRight,
+} from "lucide-react";
+
+import {
+    useNavigate,
+} from "react-router-dom";
+
 import heroImage from "../../assets/heroimag3.png";
 
+
 function Hero() {
-    const navigate = useNavigate();
+
+    const navigate =
+        useNavigate();
+
 
     return (
-        <section className="relative overflow-hidden bg-[#fffdf5]">
 
-            <div className="flex h-[650px] w-full items-start px-6 sm:px-10 lg:px-16 xl:px-20">
+        <section
+            className="
+                relative
+                overflow-hidden
+                bg-[#fffdf5]
+            "
+        >
 
+            {/* ================================================= */}
+            {/* HERO CONTAINER */}
+            {/* ================================================= */}
+
+            <div
+                className="
+                    mx-auto
+                    flex
+                    w-full
+                    max-w-[1600px]
+                    flex-col
+                    px-5
+                    py-12
+                    sm:px-8
+                    sm:py-16
+                    lg:h-[650px]
+                    lg:flex-row
+                    lg:items-start
+                    lg:px-16
+                    lg:py-0
+                    xl:px-20
+                "
+            >
+
+                {/* ================================================= */}
                 {/* LEFT SIDE */}
+                {/* ================================================= */}
 
-                <div className="flex w-full items-center lg:min-h-[620px] lg:w-[48%]">
+                <div
+                    className="
+                        flex
+                        w-full
+                        items-center
+                        lg:min-h-[620px]
+                        lg:w-[48%]
+                    "
+                >
 
-                    <div className="max-w-2xl">
+                    <div
+                        className="
+                            w-full
+                            max-w-2xl
+                        "
+                    >
 
-                        <h1 className="text-5xl font-extrabold leading-[1.03] tracking-tight text-slate-950 sm:text-6xl lg:text-[68px] xl:text-[74px]">
+                        {/* Heading */}
+
+                        <h1
+                            className="
+                                text-4xl
+                                font-extrabold
+                                leading-[1.05]
+                                tracking-tight
+                                text-slate-950
+                                sm:text-5xl
+                                md:text-6xl
+                                lg:text-[68px]
+                                xl:text-[74px]
+                            "
+                        >
 
                             Your Dream Job
                             <br />
@@ -25,24 +93,76 @@ function Hero() {
 
                         </h1>
 
-                        <p className="mt-7 max-w-xl text-xl leading-9 text-slate-700 sm:text-2xl">
 
-                            Craft Your Future. Stand Out with a Stellar
-                            Resume!
+                        {/* Description */}
+
+                        <p
+                            className="
+                                mt-5
+                                max-w-xl
+                                text-base
+                                leading-7
+                                text-slate-700
+                                sm:mt-6
+                                sm:text-xl
+                                sm:leading-8
+                                md:text-2xl
+                                md:leading-9
+                            "
+                        >
+
+                            Craft Your Future. Stand Out with a
+                            Stellar Resume!
 
                         </p>
+
+
+                        {/* CTA */}
 
                         <button
                             type="button"
                             onClick={() =>
-                                navigate("/resume-builder")
+                                navigate(
+                                    "/resume-builder",
+                                )
                             }
-                            className="mt-9 inline-flex items-center gap-3 rounded-full bg-blue-500 px-20 py-5 text-lg font-bold text-white shadow-lg shadow-blue-200 transition-all duration-300 hover:-translate-y-1 hover:bg-blue-600 hover:shadow-xl"
+                            className="
+                                mt-7
+                                inline-flex
+                                w-full
+                                items-center
+                                justify-center
+                                gap-3
+                                rounded-full
+                                bg-blue-500
+                                px-7
+                                py-4
+                                text-base
+                                font-bold
+                                text-white
+                                shadow-lg
+                                shadow-blue-200
+                                transition-all
+                                duration-300
+                                hover:-translate-y-1
+                                hover:bg-blue-600
+                                hover:shadow-xl
+                                sm:mt-8
+                                sm:w-auto
+                                sm:px-12
+                                sm:py-4
+                                sm:text-lg
+                                lg:px-16
+                                lg:py-5
+                                xl:px-20
+                            "
                         >
 
                             Create your Resume
 
-                            <ArrowRight size={21} />
+                            <ArrowRight
+                                size={20}
+                            />
 
                         </button>
 
@@ -51,105 +171,83 @@ function Hero() {
                 </div>
 
 
-                {/* RIGHT SIDE */}
+                {/* ================================================= */}
+                {/* RIGHT / MOBILE IMAGE */}
+                {/* ================================================= */}
 
-                <div className="relative hidden h-[650px] w-[52%] lg:block">
+                <div
+                    className="
+                        relative
+                        mt-8
+                        flex
+                        w-full
+                        items-center
+                        justify-center
+                        lg:hidden
+                    "
+                >
 
-                    {/* TOP LEFT CARD */}
-
-                    {/* <div className="absolute left-0 top-8 z-30 w-48 rounded-3xl bg-[#ffd166] px-5 py-5 shadow-xl">
-
-                        <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-white">
-                            <span className="text-lg font-bold text-blue-600">
-                                ✓
-                            </span>
-                        </div>
-
-                        <p className="text-sm font-medium leading-6 text-slate-900">
-                            Craft Your Future.
-                            <br />
-                            Stand Out with a
-                            <br />
-                            Stellar Resume!
-                        </p>
-
-                    </div> */}
-
-
-                    {/* TOP RIGHT CARD */}
-
-                    {/* <div className="absolute right-0 top-2 z-30 w-48 rounded-3xl bg-[#ffd166] px-5 py-5 shadow-xl">
-
-                        <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-white">
-                            <span className="text-lg font-bold text-blue-600">
-                                ★
-                            </span>
-                        </div>
-
-                        <p className="text-sm font-medium leading-6 text-slate-900">
-                            Learn skills that
-                            <br />
-                            will make you
-                            <br />
-                            stand out.
-                        </p>
-
-                    </div> */}
-
-
-                    {/* CENTER CHARACTER */}
-
-                    <div className="absolute left-1/2 top-[46%] z-20 w-[520px] -translate-x-1/2 -translate-y-1/2 xl:w-[560px]">
+                    <div
+                        className="
+                            relative
+                            w-full
+                            max-w-[430px]
+                            sm:max-w-[500px]
+                        "
+                    >
 
                         <img
                             src={heroImage}
                             alt="Professional preparing for a career"
-                            className="w-full object-contain"
+                            className="
+                                h-auto
+                                w-full
+                                object-contain
+                            "
                         />
 
                     </div>
 
-
-                    {/* BOTTOM LEFT CARD */}
-
-                    {/* <div className="absolute bottom-8 left-0 z-30 w-48 rounded-3xl border-2 border-blue-500 bg-[#ffd166] px-5 py-5 shadow-xl">
-
-                        <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-white">
-                            <span className="text-lg font-bold text-blue-600">
-                                ✓
-                            </span>
-                        </div>
-
-                        <p className="text-sm font-medium leading-6 text-slate-900">
-                            Build a resume
-                            <br />
-                            that gets you
-                            <br />
-                            noticed.
-                        </p>
-
-                    </div> */}
+                </div>
 
 
-                    {/* BOTTOM RIGHT CARD */}
+                {/* ================================================= */}
+                {/* DESKTOP IMAGE */}
+                {/* ================================================= */}
 
-                    {/* <div className="absolute bottom-8 right-0 z-30 w-48 rounded-3xl bg-[#ffd166] px-5 py-5 shadow-xl">
+                <div
+                    className="
+                        relative
+                        hidden
+                        h-[650px]
+                        w-[52%]
+                        lg:block
+                    "
+                >
 
-                        <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-white">
-                            <span className="text-lg font-bold text-blue-600">
-                                →
-                            </span>
-                        </div>
+                    <div
+                        className="
+                            absolute
+                            left-1/2
+                            top-[46%]
+                            z-20
+                            w-[520px]
+                            -translate-x-1/2
+                            -translate-y-1/2
+                            xl:w-[560px]
+                        "
+                    >
 
-                        <p className="text-sm font-medium leading-6 text-slate-900">
-                            Get ready for
-                            <br />
-                            your dream
-                            <br />
-                            career.
-                        </p>
+                        <img
+                            src={heroImage}
+                            alt="Professional preparing for a career"
+                            className="
+                                w-full
+                                object-contain
+                            "
+                        />
 
-                    </div> */}
+                    </div>
 
                 </div>
 
@@ -158,5 +256,6 @@ function Hero() {
         </section>
     );
 }
+
 
 export default Hero;
