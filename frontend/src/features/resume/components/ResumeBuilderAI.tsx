@@ -110,7 +110,7 @@ function ResumeBuilderAI({
                                         text-slate-900
                                     "
                                 >
-                                    Resume AI
+                                    Colleges To Career AI
                                 </h2>
 
                                 <p

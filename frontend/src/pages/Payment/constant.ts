@@ -1,96 +1,109 @@
 export const PAYMENT_PLANS = [
-
     {
         planName: "elegant",
+
         planCard: {
             template: "elegant",
-            price: "₹149",
+            price: "₹49",
             description:
-                "Elegant premium marriage biodata with modern typography and beautiful layout.",
+                "A clean and elegant resume template designed for students and early-career professionals.",
         },
+
         paymentSummary: {
             templateKey: "Template",
-            teplateName: "Elegant",
+            templateName: "Elegant",
             priceKey: "Price",
-            priceValue: "₹149",
-            TotalKey: "Total",
-            totalValue: "₹149",
+            priceValue: "₹49",
+            totalKey: "Total",
+            totalValue: "₹49",
             gstKey: "GST",
             gstValue: "Included",
         },
     },
+
     {
         planName: "modern",
+
         planCard: {
             template: "modern",
-            price: "₹249",
+            price: "₹99",
             description:
-                "Elegant premium marriage biodata with modern typography and beautiful layout.",
+                "A modern and professional resume design that helps your skills and experience stand out.",
         },
+
         paymentSummary: {
             templateKey: "Template",
-            teplateName: "Royal",
+            templateName: "Modern",
             priceKey: "Price",
-            priceValue: "₹149",
-            TotalKey: "Total",
-            totalValue: "₹149",
+            priceValue: "₹99",
+            totalKey: "Total",
+            totalValue: "₹99",
             gstKey: "GST",
             gstValue: "Included",
         },
     },
+
     {
         planName: "royal",
+
         planCard: {
-            template: "Royal",
+            template: "royal",
             price: "₹149",
             description:
-                "Elegant premium marriage biodata with modern typography and beautiful layout.",
+                "A polished resume template with a premium layout for students and professionals.",
         },
+
         paymentSummary: {
             templateKey: "Template",
-            teplateName: "Royal",
+            templateName: "Royal",
             priceKey: "Price",
             priceValue: "₹149",
-            TotalKey: "Total",
+            totalKey: "Total",
             totalValue: "₹149",
             gstKey: "GST",
             gstValue: "Included",
         },
     },
+
     {
         planName: "luxury",
+
         planCard: {
             template: "luxury",
-            price: "₹149",
+            price: "₹299",
             description:
-                "Elegant premium marriage biodata with modern typography and beautiful layout.",
+                "A sophisticated resume design created for professionals who want a premium presentation.",
         },
+
         paymentSummary: {
             templateKey: "Template",
-            teplateName: "Royal",
+            templateName: "Luxury",
             priceKey: "Price",
-            priceValue: "₹149",
-            TotalKey: "Total",
-            totalValue: "₹149",
+            priceValue: "₹299",
+            totalKey: "Total",
+            totalValue: "₹299",
             gstKey: "GST",
             gstValue: "Included",
         },
     },
+
     {
         planName: "signature",
+
         planCard: {
             template: "signature",
-            price: "₹149",
+            price: "₹499",
             description:
-                "Elegant premium marriage biodata with modern typography and beautiful layout.",
+                "Our premium resume design for creating a distinctive and highly polished professional profile.",
         },
+
         paymentSummary: {
             templateKey: "Template",
-            teplateName: "Royal",
+            templateName: "Signature",
             priceKey: "Price",
-            priceValue: "₹149",
-            TotalKey: "Total",
-            totalValue: "₹149",
+            priceValue: "₹499",
+            totalKey: "Total",
+            totalValue: "₹499",
             gstKey: "GST",
             gstValue: "Included",
         },
@@ -98,12 +111,20 @@ export const PAYMENT_PLANS = [
 
     {
         planName: "premium",
+
+        planCard: {
+            template: "premium",
+            price: "₹399 / month",
+            description:
+                "Create more resumes with premium templates and additional career-building features.",
+        },
+
         paymentSummary: {
             templateKey: "Plan",
-            teplateName: "Premium",
+            templateName: "Premium",
             priceKey: "Price",
             priceValue: "₹399 / month",
-            TotalKey: "Total",
+            totalKey: "Total",
             totalValue: "₹399 / month",
             gstKey: "GST",
             gstValue: "Included",
@@ -112,16 +133,23 @@ export const PAYMENT_PLANS = [
 
     {
         planName: "ultimate",
+
+        planCard: {
+            template: "ultimate",
+            price: "₹699 / month",
+            description:
+                "Unlimited access to premium resume creation, templates, downloads, and future features.",
+        },
+
         paymentSummary: {
             templateKey: "Plan",
-            teplateName: "Ultimate",
+            templateName: "Ultimate",
             priceKey: "Price",
             priceValue: "₹699 / month",
-            TotalKey: "Total",
+            totalKey: "Total",
             totalValue: "₹699 / month",
             gstKey: "GST",
             gstValue: "Included",
         },
     },
-
 ];

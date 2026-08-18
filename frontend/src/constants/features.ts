@@ -1,23 +1,23 @@
 export const features = [
     {
         number: "01",
-        title: "Fill Your Details",
+        title: "Enter Your Details",
         description:
-            "Enter your personal, family, education, career, and partner preference details through our easy multi-step form.",
+            "Add your education, skills, experience, projects, achievements, and other career information through our simple resume builder.",
         icon: "📝",
     },
     {
         number: "02",
-        title: "Choose a Design",
+        title: "Choose Your Template",
         description:
-            "Preview your biodata in beautifully crafted premium templates and select the one that matches your style.",
+            "Explore professionally designed resume templates and choose a layout that matches your career goals and personal style.",
         icon: "🎨",
     },
     {
         number: "03",
-        title: "Download & Print",
+        title: "Download Your Resume",
         description:
-            "Download a high-quality PDF instantly or print it directly to share with your family and prospective matches.",
+            "Review your resume, make changes whenever you need, and download a professional PDF ready to share with recruiters and companies.",
         icon: "📄",
     },
 ];

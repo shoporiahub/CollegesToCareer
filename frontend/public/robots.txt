@@ -6,5 +6,6 @@ Disallow: /dashboard
 Disallow: /payment
 Disallow: /preview
 Disallow: /print
+Disallow: /resume-builder
 
-Sitemap: https://www.vivahcraft.com/sitemap.xml
+Sitemap: https://www.collegetocareer.com/sitemap.xml
