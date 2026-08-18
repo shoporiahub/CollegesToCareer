@@ -118,8 +118,10 @@ function ResumePreviewWorkspace({
                     mx-auto
                     w-full
                     max-w-[1500px]
-                    px-8
-                    py-8
+                    px-4
+                    py-6
+                    sm:px-8
+                    sm:py-8
                     lg:py-10
                 "
             >
@@ -178,14 +180,19 @@ function ResumePreviewWorkspace({
                     </section>
 
                     {/* =================================================
-                     * SIDEBAR
+                     * DESKTOP SIDEBAR
+                     *
+                     * Hidden on mobile/tablet.
+                     * Visible from xl and above.
                      * ================================================= */}
 
                     <aside
                         className="
+                            hidden
                             min-w-0
                             xl:sticky
                             xl:top-6
+                            xl:block
                         "
                     >
                         <ResumePreviewSidebar

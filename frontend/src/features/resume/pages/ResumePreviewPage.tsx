@@ -37,6 +37,10 @@ import ResumePreviewHeader from "../components/ResumePreviewHeader";
 
 import ResumePreviewWorkspace from "../components/ResumePreviewWorkspace";
 
+import ResumeTemplateButton from "../components/ResumeTemplateButton";
+
+import ResumeTemplateDrawer from "../components/ResumeTemplateDrawer";
+
 
 function ResumePreviewPage() {
 
@@ -51,9 +55,17 @@ function ResumePreviewPage() {
         useNavigate();
 
 
+    /* =========================================================
+     * RESUME HTML
+     * ========================================================= */
+
     const [html, setHtml] =
         useState<string>("");
 
+
+    /* =========================================================
+     * TEMPLATES
+     * ========================================================= */
 
     const [templates, setTemplates] =
         useState<Template[]>([]);
@@ -65,6 +77,10 @@ function ResumePreviewPage() {
     ] = useState<string>("");
 
 
+    /* =========================================================
+     * LOADING
+     * ========================================================= */
+
     const [loading, setLoading] =
         useState(true);
 
@@ -75,18 +91,40 @@ function ResumePreviewPage() {
     ] = useState(true);
 
 
+    /* =========================================================
+     * TEMPLATE CHANGE
+     * ========================================================= */
+
     const [
         changingTemplate,
         setChangingTemplate,
     ] = useState<string | null>(null);
 
 
+    /* =========================================================
+     * DOWNLOAD
+     * ========================================================= */
+
     const [downloading, setDownloading] =
         useState(false);
 
 
+    /* =========================================================
+     * ERROR
+     * ========================================================= */
+
     const [error, setError] =
         useState<string | null>(null);
+
+
+    /* =========================================================
+     * MOBILE TEMPLATE DRAWER
+     * ========================================================= */
+
+    const [
+        isTemplateDrawerOpen,
+        setIsTemplateDrawerOpen,
+    ] = useState(false);
 
 
     /*
@@ -178,9 +216,6 @@ function ResumePreviewPage() {
                      * 1. localStorage
                      * 2. resume.template_id
                      * 3. first active template
-                     *
-                     * We also make sure the ID is
-                     * not empty and actually exists.
                      */
 
                     const storedTemplateId =
@@ -547,6 +582,17 @@ function ResumePreviewPage() {
                 selectedTemplateId
             ) {
 
+                /*
+                 * If the user selects the
+                 * currently active template
+                 * from the mobile drawer,
+                 * simply close the drawer.
+                 */
+
+                setIsTemplateDrawerOpen(
+                    false,
+                );
+
                 return;
 
             }
@@ -585,7 +631,7 @@ function ResumePreviewPage() {
 
 
                 /*
-                 * Update state.
+                 * Update selected template.
                  */
 
                 setSelectedTemplateId(
@@ -604,8 +650,23 @@ function ResumePreviewPage() {
                     );
 
 
+                /*
+                 * Update main preview.
+                 */
+
                 setHtml(
                     updatedHtml,
+                );
+
+
+                /*
+                 * Close mobile drawer
+                 * only after the new
+                 * template has loaded.
+                 */
+
+                setIsTemplateDrawerOpen(
+                    false,
                 );
 
             } catch (err) {
@@ -627,6 +688,31 @@ function ResumePreviewPage() {
                 );
 
             }
+
+        };
+
+
+    /*
+     * =========================================================
+     * EDIT RESUME
+     * =========================================================
+     */
+
+    const handleEdit =
+        () => {
+
+            if (
+                !resumeId?.trim()
+            ) {
+
+                return;
+
+            }
+
+
+            navigate(
+                `/resume-builder/${resumeId}`,
+            );
 
         };
 
@@ -807,6 +893,7 @@ function ResumePreviewPage() {
         <div
             className="
                 min-h-screen
+                overflow-x-hidden
                 bg-slate-100
             "
         >
@@ -831,7 +918,9 @@ function ResumePreviewPage() {
                         selectedTemplateId,
                     )
                 }
-                resumeId={resumeId || ""}
+                resumeId={
+                    resumeId || ""
+                }
             />
 
 
@@ -846,8 +935,10 @@ function ResumePreviewPage() {
                         relative
                         z-20
                         w-full
-                        px-8
-                        pt-5
+                        px-4
+                        pt-4
+                        sm:px-8
+                        sm:pt-5
                     "
                 >
 
@@ -875,11 +966,59 @@ function ResumePreviewPage() {
 
             {/* =====================================================
              * WORKSPACE
+             *
+             * Desktop behavior remains unchanged.
+             * The existing workspace continues to handle
+             * the desktop template sidebar.
              * ===================================================== */}
 
             <ResumePreviewWorkspace
                 html={html}
                 templates={templates}
+                selectedTemplateId={
+                    selectedTemplateId
+                }
+                templateLoading={
+                    templateLoading
+                }
+                changingTemplate={
+                    changingTemplate
+                }
+                onTemplateChange={
+                    handleTemplateChange
+                }
+            />
+
+
+            {/* =====================================================
+             * MOBILE TEMPLATE BUTTON
+             * ===================================================== */}
+
+            <ResumeTemplateButton
+                onClick={() =>
+                    setIsTemplateDrawerOpen(
+                        true,
+                    )
+                }
+            />
+
+
+            {/* =====================================================
+             * MOBILE TEMPLATE DRAWER
+             * ===================================================== */}
+
+            <ResumeTemplateDrawer
+                isOpen={
+                    isTemplateDrawerOpen
+                }
+                onClose={() =>
+                    setIsTemplateDrawerOpen(
+                        false,
+                    )
+                }
+                templates={
+                    templates
+                }
                 selectedTemplateId={
                     selectedTemplateId
                 }

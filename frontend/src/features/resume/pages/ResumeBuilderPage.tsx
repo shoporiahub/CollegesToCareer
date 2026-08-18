@@ -28,12 +28,11 @@ import {
 } from "../../../services/resume.service";
 
 import ResumeBuilderHeader from "../components/ResumeBuilderHeader";
-
 import ResumeBuilderSteps from "../components/ResumeBuilderSteps";
-
 import ResumeBuilderForm from "../components/ResumeBuilderForm";
-
 import ResumeBuilderAI from "../components/ResumeBuilderAI";
+import ResumeAIButton from "../components/ResumeAIButton";
+import ResumeAIBottomSheet from "../components/ResumeAIBottomSheet";
 
 
 /* =========================================================
@@ -84,17 +83,11 @@ const defaultValues: ResumeFormValues = {
     is_default: false,
 
     experiences: [],
-
     educations: [],
-
     projects: [],
-
     skills: [],
-
     certifications: [],
-
     languages: [],
-
     achievements: [],
 };
 
@@ -125,22 +118,6 @@ function ResumeBuilderPage() {
 
 
     /* =====================================================
-     * AI
-     * ===================================================== */
-
-    const [
-        aiPrompt,
-        setAiPrompt,
-    ] = useState("");
-
-
-    const [
-        aiLoading,
-        setAiLoading,
-    ] = useState(false);
-
-
-    /* =====================================================
      * SUBMIT
      * ===================================================== */
 
@@ -165,6 +142,16 @@ function ResumeBuilderPage() {
     const [
         isLoadingResume,
         setIsLoadingResume,
+    ] = useState(false);
+
+
+    /* =====================================================
+     * MOBILE AI
+     * ===================================================== */
+
+    const [
+        isAIOpen,
+        setIsAIOpen,
     ] = useState(false);
 
 
@@ -232,14 +219,8 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Convert backend response
-                 * into the exact shape expected
-                 * by React Hook Form.
-                 *
-                 * Backend may return null for
-                 * optional fields.
-                 *
-                 * Form expects empty strings.
+                 * Convert backend response into
+                 * the shape expected by React Hook Form.
                  */
 
                 const formValues:
@@ -249,136 +230,109 @@ function ResumeBuilderPage() {
                         resume.title ??
                         "My Resume",
 
-
                     first_name:
                         resume.first_name ??
                         "",
-
 
                     last_name:
                         resume.last_name ??
                         "",
 
-
                     email:
                         resume.email ??
                         "",
-
 
                     phone:
                         resume.phone ??
                         "",
 
-
                     headline:
                         resume.headline ??
                         "",
-
 
                     summary:
                         resume.summary ??
                         "",
 
-
                     address:
                         resume.address ??
                         "",
-
 
                     city:
                         resume.city ??
                         "",
 
-
                     state:
                         resume.state ??
                         "",
-
 
                     country:
                         resume.country ??
                         "",
 
-
                     pincode:
                         resume.pincode ??
                         "",
-
 
                     linkedin_url:
                         resume.linkedin_url ??
                         "",
 
-
                     github_url:
                         resume.github_url ??
                         "",
-
 
                     portfolio_url:
                         resume.portfolio_url ??
                         "",
 
-
                     website_url:
                         resume.website_url ??
                         "",
-
 
                     profile_photo:
                         resume.profile_photo ??
                         "",
 
-
                     template_id:
                         resume.template_id ??
                         DEFAULT_TEMPLATE_ID,
-
 
                     theme:
                         resume.theme ??
                         "blue",
 
-
                     font:
                         resume.font ??
                         "inter",
-
 
                     is_default:
                         resume.is_default ??
                         false,
 
-
                     experiences:
                         resume.experiences ??
                         [],
-
 
                     educations:
                         resume.educations ??
                         [],
 
-
                     projects:
                         resume.projects ??
                         [],
-
 
                     skills:
                         resume.skills ??
                         [],
 
-
                     certifications:
                         resume.certifications ??
                         [],
 
-
                     languages:
                         resume.languages ??
                         [],
-
 
                     achievements:
                         resume.achievements ??
@@ -388,8 +342,7 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Keep the existing template
-                 * as the selected template.
+                 * Preserve the resume's template.
                  */
 
                 if (
@@ -405,7 +358,7 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Populate the entire form.
+                 * Fill the form.
                  */
 
                 reset(
@@ -456,27 +409,24 @@ function ResumeBuilderPage() {
         (): string => {
 
             /*
-             * When editing, the template
-             * comes from the loaded resume.
-             *
-             * The form already contains it,
-             * so we don't need to replace it
-             * with localStorage.
+             * Editing:
+             * read the template currently loaded
+             * into the form.
              */
 
             if (resumeId) {
 
-                const currentValues =
+                const currentTemplateId =
                     methods.getValues(
                         "template_id",
                     );
 
 
                 if (
-                    currentValues?.trim()
+                    currentTemplateId?.trim()
                 ) {
 
-                    return currentValues.trim();
+                    return currentTemplateId.trim();
 
                 }
 
@@ -667,11 +617,7 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Build final form data.
-                 *
-                 * This is especially important
-                 * for new resumes because the
-                 * template comes from localStorage.
+                 * Build final data.
                  */
 
                 const resumeData:
@@ -780,50 +726,6 @@ function ResumeBuilderPage() {
 
 
     /* =====================================================
-     * AI
-     * ===================================================== */
-
-    const handleAskAI =
-        async () => {
-
-            if (
-                !aiPrompt.trim()
-            ) {
-
-                return;
-
-            }
-
-
-            try {
-
-                setAiLoading(
-                    true,
-                );
-
-
-                /*
-                 * AI integration will
-                 * be connected here.
-                 */
-
-                console.log(
-                    "AI request:",
-                    aiPrompt,
-                );
-
-            } finally {
-
-                setAiLoading(
-                    false,
-                );
-
-            }
-
-        };
-
-
-    /* =====================================================
      * LOADING EXISTING RESUME
      * ===================================================== */
 
@@ -834,16 +736,40 @@ function ResumeBuilderPage() {
 
         return (
 
-            <div className="flex min-h-screen items-center justify-center bg-slate-50">
+            <div
+                className="
+                    flex
+                    min-h-screen
+                    items-center
+                    justify-center
+                    bg-slate-50
+                "
+            >
 
                 <div className="text-center">
 
-                    <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
+                    <div
+                        className="
+                            mx-auto
+                            h-10
+                            w-10
+                            animate-spin
+                            rounded-full
+                            border-4
+                            border-slate-200
+                            border-t-blue-600
+                        "
+                    />
 
-                    <p className="mt-4 text-sm font-semibold text-slate-600">
-
+                    <p
+                        className="
+                            mt-4
+                            text-sm
+                            font-semibold
+                            text-slate-600
+                        "
+                    >
                         Loading your resume...
-
                     </p>
 
                 </div>
@@ -861,8 +787,13 @@ function ResumeBuilderPage() {
 
     return (
 
-        <div className="min-h-screen bg-slate-50">
-
+        <div
+            className="
+                min-h-screen
+                overflow-x-hidden
+                bg-slate-50
+            "
+        >
 
             {/* ================================================= */}
             {/* HEADER */}
@@ -887,76 +818,128 @@ function ResumeBuilderPage() {
                     className="
                         mx-auto
                         flex
+                        w-full
                         max-w-[1600px]
-                        gap-8
-                        px-6
-                        py-8
+                        flex-col
+                        gap-6
+                        px-4
+                        py-6
+                        sm:px-6
+                        sm:py-8
+                        lg:flex-row
+                        lg:gap-8
                     "
                 >
 
-
                     {/* ================================================= */}
-                    {/* LEFT */}
-                    {/* ================================================= */}
-
-                    <ResumeBuilderSteps
-                        currentStep={
-                            currentStep
-                        }
-                        onStepClick={
-                            handleStepClick
-                        }
-                    />
-
-
-                    {/* ================================================= */}
-                    {/* CENTER */}
+                    {/* LEFT - STEPS */}
                     {/* ================================================= */}
 
-                    <ResumeBuilderForm
-                        currentStep={
-                            currentStep
-                        }
-                        isSubmitting={
-                            isSubmitting
-                        }
-                        submitError={
-                            submitError
-                        }
-                        onNext={
-                            handleNext
-                        }
-                        onPrevious={
-                            handlePrevious
-                        }
-                        onSubmit={
-                            handleSubmit(
-                                onSubmit,
-                            )
-                        }
-                    />
+                    <div
+                        className="
+                            w-full
+                            lg:w-[220px]
+                            lg:shrink-0
+                        "
+                    >
+
+                        <ResumeBuilderSteps
+                            currentStep={
+                                currentStep
+                            }
+                            onStepClick={
+                                handleStepClick
+                            }
+                        />
+
+                    </div>
 
 
                     {/* ================================================= */}
-                    {/* RIGHT */}
+                    {/* CENTER - FORM */}
                     {/* ================================================= */}
 
-                    <ResumeBuilderAI
-                        prompt={
-                            aiPrompt
-                        }
-                        onPromptChange={
-                            setAiPrompt
-                        }
-                        onGenerate={
-                            handleAskAI
-                        }
-                        loading={
-                            aiLoading
-                        }
-                    />
+                    <div
+                        className="
+                            min-w-0
+                            w-full
+                            flex-1
+                        "
+                    >
+
+                        <ResumeBuilderForm
+                            currentStep={
+                                currentStep
+                            }
+                            isSubmitting={
+                                isSubmitting
+                            }
+                            submitError={
+                                submitError
+                            }
+                            onNext={
+                                handleNext
+                            }
+                            onPrevious={
+                                handlePrevious
+                            }
+                            onSubmit={
+                                handleSubmit(
+                                    onSubmit,
+                                )
+                            }
+                        />
+
+                    </div>
+
+
+                    {/* ================================================= */}
+                    {/* DESKTOP AI */}
+                    {/* ================================================= */}
+
+                    <aside
+                        className="
+                            hidden
+                            w-full
+                            shrink-0
+                            lg:block
+                            lg:w-[360px]
+                            xl:sticky
+                            xl:top-24
+                            xl:self-start
+                        "
+                    >
+
+                        <ResumeBuilderAI />
+
+                    </aside>
 
                 </div>
+
+
+                {/* ================================================= */}
+                {/* MOBILE AI BUTTON */}
+                {/* ================================================= */}
+
+                <ResumeAIButton
+                    onClick={() =>
+                        setIsAIOpen(true)
+                    }
+                />
+
+
+                {/* ================================================= */}
+                {/* MOBILE AI BOTTOM SHEET */}
+                {/* ================================================= */}
+
+                <ResumeAIBottomSheet
+                    isOpen={
+                        isAIOpen
+                    }
+                    onClose={() =>
+                        setIsAIOpen(false)
+                    }
+                />
 
             </FormProvider>
 

@@ -63,18 +63,21 @@ function ResumePreviewHeader({
             <div
                 className="
                     flex
-                    h-[76px]
+                    h-[68px]
                     w-full
                     items-center
                     justify-between
-                    gap-4
-                    px-8
+                    gap-2
+                    px-3
+                    sm:h-[76px]
+                    sm:gap-4
                     sm:px-9
+                    lg:px-8
                 "
             >
 
                 {/* ================================================= */}
-                {/* LEFT */}
+                {/* LEFT - EDIT */}
                 {/* ================================================= */}
 
                 <button
@@ -82,21 +85,25 @@ function ResumePreviewHeader({
                     onClick={handleEdit}
                     className="
                         inline-flex
+                        shrink-0
                         items-center
-                        gap-2
+                        gap-1.5
                         rounded-xl
                         border
                         border-slate-200
                         bg-white
-                        px-4
+                        px-3
                         py-2.5
-                        text-sm
+                        text-xs
                         font-bold
                         text-slate-700
                         transition
                         hover:border-blue-200
                         hover:bg-blue-50
                         hover:text-blue-700
+                        sm:gap-2
+                        sm:px-4
+                        sm:text-sm
                     "
                 >
 
@@ -104,7 +111,7 @@ function ResumePreviewHeader({
                         size={18}
                     />
 
-                    <span className="hidden sm:inline">
+                    <span>
                         Edit Resume
                     </span>
 
@@ -115,7 +122,14 @@ function ResumePreviewHeader({
                 {/* CENTER */}
                 {/* ================================================= */}
 
-                <div className="hidden text-center sm:block">
+                <div
+                    className="
+                        hidden
+                        flex-1
+                        text-center
+                        sm:block
+                    "
+                >
 
                     <h2
                         className="
@@ -131,10 +145,18 @@ function ResumePreviewHeader({
 
 
                 {/* ================================================= */}
-                {/* RIGHT */}
+                {/* RIGHT ACTIONS */}
                 {/* ================================================= */}
 
-                <div className="flex items-center gap-2">
+                <div
+                    className="
+                        flex
+                        shrink-0
+                        items-center
+                        gap-1.5
+                        sm:gap-2
+                    "
+                >
 
                     {/* Download */}
 
@@ -148,12 +170,13 @@ function ResumePreviewHeader({
                         className="
                             inline-flex
                             items-center
+                            justify-center
                             gap-2
                             rounded-xl
                             bg-blue-600
-                            px-4
+                            px-3
                             py-2.5
-                            text-sm
+                            text-xs
                             font-bold
                             text-white
                             shadow-sm
@@ -162,20 +185,22 @@ function ResumePreviewHeader({
                             hover:shadow-md
                             disabled:cursor-not-allowed
                             disabled:opacity-60
+                            sm:px-4
+                            sm:text-sm
                         "
                     >
 
                         {downloading ? (
 
                             <Loader2
-                                size={18}
+                                size={17}
                                 className="animate-spin"
                             />
 
                         ) : (
 
                             <Download
-                                size={18}
+                                size={17}
                             />
 
                         )}
@@ -183,7 +208,7 @@ function ResumePreviewHeader({
                         <span>
                             {downloading
                                 ? "Preparing..."
-                                : "Download PDF"}
+                                : "Download"}
                         </span>
 
                     </button>
@@ -201,14 +226,15 @@ function ResumePreviewHeader({
                         className="
                             inline-flex
                             items-center
+                            justify-center
                             gap-2
                             rounded-xl
                             border
                             border-slate-300
                             bg-white
-                            px-4
+                            px-3
                             py-2.5
-                            text-sm
+                            text-xs
                             font-bold
                             text-slate-700
                             transition
@@ -217,11 +243,13 @@ function ResumePreviewHeader({
                             hover:text-blue-700
                             disabled:cursor-not-allowed
                             disabled:opacity-50
+                            sm:px-4
+                            sm:text-sm
                         "
                     >
 
                         <Printer
-                            size={18}
+                            size={17}
                         />
 
                         <span>
