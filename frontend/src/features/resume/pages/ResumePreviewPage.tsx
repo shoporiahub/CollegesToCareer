@@ -51,8 +51,8 @@ function ResumePreviewPage() {
     }>();
 
 
-    const navigate =
-        useNavigate();
+    // const navigate =
+    //     useNavigate();
 
 
     /* =========================================================
