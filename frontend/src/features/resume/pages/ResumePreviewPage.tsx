@@ -698,23 +698,23 @@ function ResumePreviewPage() {
      * =========================================================
      */
 
-    const handleEdit =
-        () => {
+    // const handleEdit =
+    //     () => {
 
-            if (
-                !resumeId?.trim()
-            ) {
+    //         if (
+    //             !resumeId?.trim()
+    //         ) {
 
-                return;
+    //             return;
 
-            }
+    //         }
 
 
-            navigate(
-                `/resume-builder/${resumeId}`,
-            );
+    //         navigate(
+    //             `/resume-builder/${resumeId}`,
+    //         );
 
-        };
+    //     };
 
 
     /*
