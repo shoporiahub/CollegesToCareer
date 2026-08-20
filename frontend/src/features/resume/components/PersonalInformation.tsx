@@ -1,21 +1,94 @@
+import { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import {
     BriefcaseBusiness,
+    Camera,
     Globe,
     Link2,
     MapPin,
     UserRound,
+    X,
 } from "lucide-react";
 
 import FormField from "../../../components/ui/FormField";
 import Input from "../../../components/ui/Input";
-
+import {uploadProfilePhoto} from "../../upload/services/upload.service";
 
 function PersonalInformation() {
     const {
         register,
+        watch,
+        setValue,
         formState: { errors },
     } = useFormContext();
+
+    const [uploadingPhoto, setUploadingPhoto] = useState(false);
+
+    const profilePhoto = watch("profile_photo");
+
+
+    /* =========================================================
+     * PROFILE PHOTO
+     * ========================================================= */
+
+    const handlePhotoUpload = async (
+        file: File,
+    ) => {
+        try {
+            setUploadingPhoto(true);
+
+            const url =
+                await uploadProfilePhoto(file);
+
+            setValue(
+                "profile_photo",
+                url,
+                {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                },
+            );
+        } catch (error) {
+            console.error(
+                "Profile photo upload failed:",
+                error,
+            );
+        } finally {
+            setUploadingPhoto(false);
+        }
+    };
+
+
+    const handlePhotoChange = async (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        const file =
+            event.target.files?.[0];
+
+        if (!file) {
+            return;
+        }
+
+        await handlePhotoUpload(file);
+
+        /*
+         * Allows the user to select the same
+         * file again after removing/changing it.
+         */
+        event.target.value = "";
+    };
+
+
+    const handleRemovePhoto = () => {
+        setValue(
+            "profile_photo",
+            "",
+            {
+                shouldDirty: true,
+                shouldValidate: true,
+            },
+        );
+    };
 
 
     return (
@@ -53,6 +126,169 @@ function PersonalInformation() {
                 </div>
 
 
+                {/* ================================================= */}
+                {/* PROFILE PHOTO */}
+                {/* ================================================= */}
+
+                <div className="mb-8">
+
+                    <FormField
+                        label="Profile Photo"
+                        error={
+                            errors.profile_photo?.message as
+                            | string
+                            | undefined
+                        }
+                    >
+
+                        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
+
+
+                            {/* Photo Preview */}
+
+                            <div className="relative shrink-0">
+
+                                {profilePhoto ? (
+
+                                    <div className="relative">
+
+                                        <img
+                                            src={profilePhoto}
+                                            alt="Profile preview"
+                                            className="
+                                                h-28
+                                                w-28
+                                                rounded-2xl
+                                                border-2
+                                                border-slate-200
+                                                object-cover
+                                                shadow-sm
+                                            "
+                                        />
+
+                                        {!uploadingPhoto && (
+                                            <button
+                                                type="button"
+                                                onClick={
+                                                    handleRemovePhoto
+                                                }
+                                                className="
+                                                    absolute
+                                                    -right-2
+                                                    -top-2
+                                                    flex
+                                                    h-7
+                                                    w-7
+                                                    items-center
+                                                    justify-center
+                                                    rounded-full
+                                                    bg-red-500
+                                                    text-white
+                                                    shadow-md
+                                                    transition
+                                                    hover:bg-red-600
+                                                "
+                                                aria-label="Remove profile photo"
+                                            >
+                                                <X size={14} />
+                                            </button>
+                                        )}
+
+                                    </div>
+
+                                ) : (
+
+                                    <div
+                                        className="
+                                            flex
+                                            h-28
+                                            w-28
+                                            items-center
+                                            justify-center
+                                            rounded-2xl
+                                            border-2
+                                            border-dashed
+                                            border-slate-300
+                                            bg-slate-50
+                                            text-slate-400
+                                        "
+                                    >
+                                        <Camera size={30} />
+                                    </div>
+
+                                )}
+
+                            </div>
+
+
+                            {/* Upload */}
+
+                            <div>
+
+                                <label
+                                    htmlFor="profile-photo"
+                                    className={`
+                                        inline-flex
+                                        items-center
+                                        gap-2
+                                        rounded-xl
+                                        border
+                                        border-blue-200
+                                        bg-blue-50
+                                        px-5
+                                        py-3
+                                        text-sm
+                                        font-bold
+                                        text-blue-700
+                                        transition
+                                        ${uploadingPhoto
+                                            ? "cursor-not-allowed opacity-60"
+                                            : "cursor-pointer hover:border-blue-300 hover:bg-blue-100"
+                                        }
+                                    `}
+                                >
+
+                                    <Camera size={18} />
+
+                                    {uploadingPhoto
+                                        ? "Uploading..."
+                                        : profilePhoto
+                                            ? "Change Photo"
+                                            : "Upload Photo"}
+
+                                </label>
+
+
+                                <input
+                                    id="profile-photo"
+                                    type="file"
+                                    accept="image/jpeg,image/png,image/webp"
+                                    disabled={uploadingPhoto}
+                                    className="hidden"
+                                    onChange={
+                                        handlePhotoChange
+                                    }
+                                />
+
+
+                                <p className="mt-2 max-w-sm text-xs leading-5 text-slate-500">
+                                    Upload a clear professional photo.
+                                    JPG, PNG, or WebP. Maximum size 5 MB.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </FormField>
+
+                </div>
+
+
+                {/* ================================================= */}
+                {/* NAME / CONTACT */}
+                {/* ================================================= */}
+
                 <div className="grid gap-6 md:grid-cols-2">
 
 
@@ -71,7 +307,8 @@ function PersonalInformation() {
                             placeholder="Enter your first name"
                             autoComplete="given-name"
                             {...register("first_name", {
-                                required: "First name is required.",
+                                required:
+                                    "First name is required.",
                                 minLength: {
                                     value: 2,
                                     message:
@@ -103,7 +340,8 @@ function PersonalInformation() {
                             placeholder="Enter your last name"
                             autoComplete="family-name"
                             {...register("last_name", {
-                                required: "Last name is required.",
+                                required:
+                                    "Last name is required.",
                                 minLength: {
                                     value: 2,
                                     message:
@@ -136,7 +374,8 @@ function PersonalInformation() {
                             placeholder="you@example.com"
                             autoComplete="email"
                             {...register("email", {
-                                required: "Email address is required.",
+                                required:
+                                    "Email address is required.",
                                 pattern: {
                                     value:
                                         /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -165,7 +404,8 @@ function PersonalInformation() {
                             placeholder="Enter your phone number"
                             autoComplete="tel"
                             {...register("phone", {
-                                required: "Phone number is required.",
+                                required:
+                                    "Phone number is required.",
                                 pattern: {
                                     value:
                                         /^[+]?[\d\s()-]{7,20}$/,
@@ -230,7 +470,8 @@ function PersonalInformation() {
                         <Input
                             placeholder="e.g. Software Engineer Resume"
                             {...register("title", {
-                                required: "Resume title is required.",
+                                required:
+                                    "Resume title is required.",
                                 minLength: {
                                     value: 2,
                                     message:
@@ -307,7 +548,27 @@ function PersonalInformation() {
                             })}
                             rows={7}
                             placeholder="Write a short professional summary describing your experience, strengths, and career goals..."
-                            className="w-full resize-y rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm leading-6 text-slate-900 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-slate-400 focus:border-violet-500 focus:ring-4 focus:ring-violet-100"
+                            className="
+                                w-full
+                                resize-y
+                                rounded-xl
+                                border
+                                border-slate-300
+                                bg-white
+                                px-4
+                                py-3
+                                text-sm
+                                leading-6
+                                text-slate-900
+                                outline-none
+                                transition-all
+                                duration-200
+                                placeholder:text-slate-400
+                                hover:border-slate-400
+                                focus:border-violet-500
+                                focus:ring-4
+                                focus:ring-violet-100
+                            "
                         />
 
                     </FormField>
@@ -368,7 +629,8 @@ function PersonalInformation() {
                                 placeholder="Enter your address"
                                 autoComplete="street-address"
                                 {...register("address", {
-                                    required: "Address is required.",
+                                    required:
+                                        "Address is required.",
                                     maxLength: {
                                         value: 500,
                                         message:
@@ -397,7 +659,8 @@ function PersonalInformation() {
                             placeholder="e.g. Bengaluru"
                             autoComplete="address-level2"
                             {...register("city", {
-                                required: "City is required.",
+                                required:
+                                    "City is required.",
                                 minLength: {
                                     value: 2,
                                     message:
@@ -429,7 +692,8 @@ function PersonalInformation() {
                             placeholder="e.g. Karnataka"
                             autoComplete="address-level1"
                             {...register("state", {
-                                required: "State is required.",
+                                required:
+                                    "State is required.",
                                 minLength: {
                                     value: 2,
                                     message:
@@ -461,7 +725,8 @@ function PersonalInformation() {
                             placeholder="e.g. India"
                             autoComplete="country-name"
                             {...register("country", {
-                                required: "Country is required.",
+                                required:
+                                    "Country is required.",
                                 minLength: {
                                     value: 2,
                                     message:
@@ -493,7 +758,8 @@ function PersonalInformation() {
                             placeholder="Enter your pincode"
                             autoComplete="postal-code"
                             {...register("pincode", {
-                                required: "Pincode is required.",
+                                required:
+                                    "Pincode is required.",
                                 pattern: {
                                     value: /^\d{5,10}$/,
                                     message:
@@ -558,7 +824,13 @@ function PersonalInformation() {
 
                             <Link2
                                 size={18}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                className="
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
                             />
 
                             <Input
@@ -595,7 +867,13 @@ function PersonalInformation() {
 
                             <Link2
                                 size={18}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                className="
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
                             />
 
                             <Input
@@ -632,7 +910,13 @@ function PersonalInformation() {
 
                             <Link2
                                 size={18}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                className="
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
                             />
 
                             <Input
@@ -669,7 +953,13 @@ function PersonalInformation() {
 
                             <Link2
                                 size={18}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                className="
+                                    absolute
+                                    left-4
+                                    top-1/2
+                                    -translate-y-1/2
+                                    text-slate-400
+                                "
                             />
 
                             <Input
@@ -695,7 +985,9 @@ function PersonalInformation() {
             </section>
 
 
-            {/* Bottom Information */}
+            {/* ===================================================== */}
+            {/* INFORMATION MESSAGE */}
+            {/* ===================================================== */}
 
             <div className="rounded-2xl border border-blue-100 bg-blue-50 p-5">
 

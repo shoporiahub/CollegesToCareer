@@ -460,7 +460,7 @@ function ContactPage() {
                                             sm:text-base
                                         "
                                     >
-                                        support@collegetocareer.com
+                                        collegestocareer.com
                                     </p>
 
                                 </div>

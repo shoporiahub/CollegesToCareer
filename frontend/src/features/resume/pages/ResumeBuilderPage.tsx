@@ -1,5 +1,6 @@
 import {
     useEffect,
+    useRef,
     useState,
 } from "react";
 
@@ -41,6 +42,18 @@ import ResumeAIBottomSheet from "../components/ResumeAIBottomSheet";
 
 const DEFAULT_TEMPLATE_ID =
     "tpl_Og1bMn";
+
+
+/* =========================================================
+ * LOCAL STORAGE
+ * ========================================================= */
+
+const RESUME_DRAFT_KEY =
+    "resume_builder_draft";
+
+
+const RESUME_DRAFT_STEP_KEY =
+    "resume_builder_draft_step";
 
 
 /* =========================================================
@@ -170,7 +183,16 @@ function ResumeBuilderPage() {
         handleSubmit,
         trigger,
         reset,
+        watch,
     } = methods;
+
+
+    /* =====================================================
+     * DRAFT RESTORE CONTROL
+     * ===================================================== */
+
+    const draftRestored =
+        useRef(false);
 
 
     /* =====================================================
@@ -184,7 +206,8 @@ function ResumeBuilderPage() {
         }
 
 
-        const id = resumeId;
+        const id =
+            resumeId;
 
 
         async function loadResume() {
@@ -200,27 +223,16 @@ function ResumeBuilderPage() {
                 );
 
 
-                console.log(
-                    "Loading resume:",
-                    id,
-                );
-
-
                 const resume =
                     await getResumeDetail(
                         id,
                     );
 
 
-                console.log(
-                    "Resume loaded:",
-                    resume,
-                );
-
-
                 /*
-                 * Convert backend response into
-                 * the shape expected by React Hook Form.
+                 * Convert backend response
+                 * into the exact shape expected
+                 * by React Hook Form.
                  */
 
                 const formValues:
@@ -342,7 +354,17 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Preserve the resume's template.
+                 * Populate form.
+                 */
+
+                reset(
+                    formValues,
+                );
+
+
+                /*
+                 * Keep the selected template
+                 * available for other pages.
                  */
 
                 if (
@@ -355,20 +377,6 @@ function ResumeBuilderPage() {
                     );
 
                 }
-
-
-                /*
-                 * Fill the form.
-                 */
-
-                reset(
-                    formValues,
-                );
-
-
-                console.log(
-                    "Resume form populated.",
-                );
 
             } catch (error) {
 
@@ -402,58 +410,203 @@ function ResumeBuilderPage() {
 
 
     /* =====================================================
-     * GET SELECTED TEMPLATE
+     * RESTORE ANONYMOUS DRAFT
      * ===================================================== */
 
-    const getSelectedTemplateId =
-        (): string => {
+    useEffect(() => {
 
-            /*
-             * Editing:
-             * read the template currently loaded
-             * into the form.
-             */
+        /*
+         * Existing resumes must always load
+         * from the backend.
+         */
 
-            if (resumeId) {
+        if (resumeId) {
+            return;
+        }
 
-                const currentTemplateId =
-                    methods.getValues(
-                        "template_id",
+
+        /*
+         * Prevent duplicate restore.
+         */
+
+        if (
+            draftRestored.current
+        ) {
+            return;
+        }
+
+
+        draftRestored.current =
+            true;
+
+
+        try {
+
+            const savedDraft =
+                localStorage.getItem(
+                    RESUME_DRAFT_KEY,
+                );
+
+
+            if (savedDraft) {
+
+                const parsedDraft =
+                    JSON.parse(
+                        savedDraft,
                     );
 
 
-                if (
-                    currentTemplateId?.trim()
-                ) {
+                /*
+                 * Merge the draft with
+                 * default values so newly
+                 * added fields don't break
+                 * older drafts.
+                 */
 
-                    return currentTemplateId.trim();
-
-                }
+                reset({
+                    ...defaultValues,
+                    ...parsedDraft,
+                });
 
             }
 
 
             /*
-             * New resume:
-             *
-             * 1. localStorage
-             * 2. default template
+             * Restore the step the user
+             * was previously on.
              */
 
-            const storedTemplateId =
-                localStorage
-                    .getItem(
-                        "selected_template_id",
-                    )
-                    ?.trim() || "";
+            const savedStep =
+                localStorage.getItem(
+                    RESUME_DRAFT_STEP_KEY,
+                );
 
 
-            return (
-                storedTemplateId ||
-                DEFAULT_TEMPLATE_ID
-            ).trim();
+            if (savedStep) {
+
+                const parsedStep =
+                    Number(
+                        savedStep,
+                    );
+
+
+                if (
+                    Number.isInteger(
+                        parsedStep,
+                    ) &&
+                    parsedStep >= 0 &&
+                    parsedStep <
+                        RESUME_STEPS.length
+                ) {
+
+                    setCurrentStep(
+                        parsedStep,
+                    );
+
+                }
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Failed to restore resume draft:",
+                error,
+            );
+
+        }
+
+    }, [
+        resumeId,
+        reset,
+    ]);
+
+
+    /* =====================================================
+     * AUTO SAVE FORM
+     * ===================================================== */
+
+    useEffect(() => {
+
+        /*
+         * Never save an existing resume
+         * into the anonymous draft.
+         */
+
+        if (resumeId) {
+            return;
+        }
+
+
+        const subscription =
+            watch((values) => {
+
+                try {
+
+                    localStorage.setItem(
+                        RESUME_DRAFT_KEY,
+                        JSON.stringify(
+                            values,
+                        ),
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Failed to save resume draft:",
+                        error,
+                    );
+
+                }
+
+            });
+
+
+        return () => {
+
+            subscription.unsubscribe();
 
         };
+
+    }, [
+        resumeId,
+        watch,
+    ]);
+
+
+    /* =====================================================
+     * SAVE CURRENT STEP
+     * ===================================================== */
+
+    useEffect(() => {
+
+        if (resumeId) {
+            return;
+        }
+
+
+        try {
+
+            localStorage.setItem(
+                RESUME_DRAFT_STEP_KEY,
+                String(
+                    currentStep,
+                ),
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Failed to save resume step:",
+                error,
+            );
+
+        }
+
+    }, [
+        currentStep,
+        resumeId,
+    ]);
 
 
     /* =====================================================
@@ -483,9 +636,7 @@ function ResumeBuilderPage() {
 
 
             setCurrentStep(
-                (
-                    previous,
-                ) =>
+                (previous) =>
                     previous + 1,
             );
 
@@ -505,19 +656,15 @@ function ResumeBuilderPage() {
     const handlePrevious =
         () => {
 
-            const isFirstStep =
-                currentStep === 0;
-
-
-            if (isFirstStep) {
+            if (
+                currentStep === 0
+            ) {
                 return;
             }
 
 
             setCurrentStep(
-                (
-                    previous,
-                ) =>
+                (previous) =>
                     previous - 1,
             );
 
@@ -535,22 +682,20 @@ function ResumeBuilderPage() {
      * ===================================================== */
 
     const handleStepClick =
-        (
+        async (
             index: number,
         ) => {
 
             /*
-             * Don't allow jumping
-             * to future steps.
+             * Don't allow users to jump
+             * ahead.
              */
 
             if (
                 index >
                 currentStep
             ) {
-
                 return;
-
             }
 
 
@@ -563,6 +708,49 @@ function ResumeBuilderPage() {
                 top: 0,
                 behavior: "smooth",
             });
+
+        };
+
+
+    /* =====================================================
+     * TEMPLATE
+     * ===================================================== */
+
+    const getSelectedTemplateId =
+        (
+            formData?: ResumeFormValues,
+        ): string => {
+
+            /*
+             * 1. Form value
+             */
+
+            const formTemplate =
+                formData?.template_id
+                    ?.trim() || "";
+
+
+            /*
+             * 2. Stored template
+             */
+
+            const storedTemplate =
+                localStorage
+                    .getItem(
+                        "selected_template_id",
+                    )
+                    ?.trim() || "";
+
+
+            /*
+             * 3. Default
+             */
+
+            return (
+                formTemplate ||
+                storedTemplate ||
+                DEFAULT_TEMPLATE_ID
+            );
 
         };
 
@@ -582,6 +770,7 @@ function ResumeBuilderPage() {
                     null,
                 );
 
+
                 setIsSubmitting(
                     true,
                 );
@@ -592,18 +781,10 @@ function ResumeBuilderPage() {
                  */
 
                 const templateId =
-                    getSelectedTemplateId();
+                    getSelectedTemplateId(
+                        data,
+                    );
 
-
-                console.log(
-                    "Selected template ID:",
-                    templateId,
-                );
-
-
-                /*
-                 * Safety check.
-                 */
 
                 if (!templateId) {
 
@@ -617,7 +798,7 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Build final data.
+                 * Final resume data.
                  */
 
                 const resumeData:
@@ -632,49 +813,87 @@ function ResumeBuilderPage() {
 
 
                 /*
-                 * Keep selected template
-                 * in localStorage.
+                 * Always save the latest
+                 * version before authentication.
                  */
 
-                localStorage.setItem(
-                    "selected_template_id",
-                    templateId,
-                );
+                if (!resumeId) {
 
+                    localStorage.setItem(
+                        RESUME_DRAFT_KEY,
+                        JSON.stringify(
+                            resumeData,
+                        ),
+                    );
 
-                console.log(
-                    resumeId
-                        ? "Updating resume:"
-                        : "Creating resume:",
-                    resumeData,
-                );
+                }
 
 
                 /* =================================================
-                 * EDIT EXISTING RESUME
+                 * AUTHENTICATION CHECK
+                 * ================================================= */
+
+                const token =
+                    localStorage.getItem(
+                        "access_token",
+                    );
+
+
+                /*
+                 * NEW USER / LOGGED OUT USER
+                 *
+                 * Do NOT call POST /resumes.
+                 *
+                 * The API would return 401 and
+                 * the Axios interceptor would
+                 * redirect to login.
+                 */
+
+                if (
+                    !token &&
+                    !resumeId
+                ) {
+
+                    navigate(
+                        "/login?redirect=/resume-builder",
+                    );
+
+                    return;
+
+                }
+
+
+                /* =================================================
+                 * UPDATE EXISTING RESUME
                  * ================================================= */
 
                 if (resumeId) {
 
-                    const resume =
+                    const updatedResume =
                         await updateResume(
                             resumeId,
                             resumeData,
                         );
 
 
-                    console.log(
-                        "Resume updated:",
-                        resume,
+                    /*
+                     * Keep selected template
+                     * synchronized.
+                     */
+
+                    localStorage.setItem(
+                        "selected_template_id",
+                        templateId,
                     );
 
 
                     navigate(
-                        `/resume-preview/${resumeId}`,
+                        `/resume-preview/${updatedResume.id}`,
                     );
 
 
                     return;
+
                 }
 
 
@@ -688,9 +907,29 @@ function ResumeBuilderPage() {
                     );
 
 
-                console.log(
-                    "Resume created:",
-                    resume,
+                /*
+                 * Resume is now permanently
+                 * stored in the database.
+                 *
+                 * Remove anonymous draft.
+                 */
+
+                localStorage.removeItem(
+                    RESUME_DRAFT_KEY,
+                );
+
+                localStorage.removeItem(
+                    RESUME_DRAFT_STEP_KEY,
+                );
+
+
+                /*
+                 * Keep selected template.
+                 */
+
+                localStorage.setItem(
+                    "selected_template_id",
+                    templateId,
                 );
 
 
@@ -743,6 +982,7 @@ function ResumeBuilderPage() {
                     items-center
                     justify-center
                     bg-slate-50
+                    px-6
                 "
             >
 

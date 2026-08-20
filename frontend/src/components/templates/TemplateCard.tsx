@@ -45,10 +45,6 @@ function TemplateCard({
                     {price > 0 && <span className="text-xl font-bold text-blue-300">
                         ₹{price}
                     </span>}
-
-                    <span className="rounded-full bg-yellow-400 px-3 py-1 text-sm font-bold text-slate-900">
-                        ★ 5.0
-                    </span>
                 </div>
 
                 <div className="mt-8 flex items-center justify-center rounded-xl bg-white py-4 text-lg font-bold text-blue-800 transition duration-300 group-hover:bg-slate-100">
